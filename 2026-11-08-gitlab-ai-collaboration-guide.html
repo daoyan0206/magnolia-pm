@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>多人 AI 协作｜版本分支精简教程</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f5f8;color:#203247;font:16px/1.75 "Microsoft YaHei","PingFang SC",sans-serif}main{max-width:880px;margin:28px auto;padding:38px 46px;background:white;border:1px solid #dbe4ed;border-radius:14px}h1{font-size:30px;margin:5px 0 12px}h2{font-size:23px;margin:32px 0 12px;padding-top:16px;border-top:1px solid #dbe4ed}h3{font-size:17px;margin:22px 0 8px}p{margin:10px 0}a{color:#176dbe;overflow-wrap:anywhere}pre{padding:16px;background:#edf3f8;border:1px solid #dbe4ed;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.8 Consolas,"Microsoft YaHei",monospace}code{font-family:Consolas,"Microsoft YaHei",monospace}.tip{padding:14px 18px;background:#eaf4ff;border-left:4px solid #176dbe;border-radius:5px;margin:16px 0}.warn{background:#fff6e8;border-color:#cc9236}.muted{color:#667789;font-size:13px}.figure{overflow:auto;margin:18px 0}svg{width:100%;min-width:590px;display:block}svg text{font-family:"Microsoft YaHei",sans-serif;fill:#203247}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;padding:10px;border:1px solid #dbe4ed}th{background:#edf3f8}.print{float:right;border:1px solid #dbe4ed;background:white;padding:8px 12px;border-radius:6px;cursor:pointer}@media(max-width:650px){main{padding:24px 18px;margin:0;border:0;border-radius:0}h1{font-size:25px}.print{float:none;margin-bottom:15px}}@media print{body{background:white;font-size:10.5pt}main{border:0;margin:0;padding:0;max-width:none}.print{display:none}h2,h3{break-after:avoid}pre,.tip,.figure,tr{break-inside:avoid}svg{min-width:0}@page{size:A4;margin:16mm}}
+</style></head><body><main>
+<button class="print" onclick="window.print()">打印 / 另存为 PDF</button>
+<h1>多人 AI 协作 · 精简操作教程</h1>
+<p><strong>按版本分支协作，不按单项任务创建分支。</strong><br>命名：<code>version/版本号-日期</code>，例如 <code>version/v0.1.0-20261108</code>。</p>
+<p class="muted">Windows / PowerShell 示例 · 示例版本号和日期按实际替换 · 更新：2026-11-08</p>
+<div class="tip warn">前提：已安装 Git、已获仓库访问与版本分支推送权限。项目基线和启动说明由负责人准备；本教程不执行仓库迁移或远端配置。所有命令在自己的项目目录内按行执行，报错就停。切换分支前先保存并提交本地修改；不要覆盖已有目录、上传密钥或强制推送。</div>
+<section id="flow"><h2>1．主要工作流程是什么？</h2>
+<div class="tip"><strong>确定本版范围 → 创建统一版本分支 → 多人 AI 修改并同步 → 整体体验确认 → 合入 main → 冻结交付</strong></div>
+<div class="figure"><svg viewBox="0 0 780 180" role="img" aria-label="成员各自电脑的改动汇总到同一个版本分支，整体确认后合入 main，再冻结交付">
+<g fill="#edf3f8" stroke="#cbd9e5"><rect x="8" y="12" width="165" height="42" rx="7"/><rect x="8" y="68" width="165" height="42" rx="7"/><rect x="8" y="124" width="165" height="42" rx="7"/><rect x="230" y="55" width="245" height="70" rx="8"/><rect x="535" y="55" width="95" height="70" rx="8"/><rect x="685" y="55" width="87" height="70" rx="8"/></g>
+<g stroke="#176dbe" stroke-width="2" fill="none"><path d="M173 33 H195 V90 H230"/><path d="M173 89 H230"/><path d="M173 145 H195 V90"/><path d="M475 90 H535"/><path d="M630 90 H685"/></g>
+<g text-anchor="middle" font-size="15"><text x="90" y="39">成员 A：自己电脑</text><text x="90" y="95">成员 B：自己电脑</text><text x="90" y="151">成员 C：自己电脑</text><text x="352" y="83">同一个版本分支</text><text x="352" y="108" font-size="12">version/v0.1.0-20261108</text><text x="582" y="96">main</text><text x="728" y="85">冻结</text><text x="728" y="109">交付</text><text x="505" y="42" font-size="12">确认后 MR</text></g></svg></div>
+<p>每人一份独立项目副本，但<strong>共同提交到同一个版本分支</strong>。本轮的多项需求放在这个版本中，不为每项需求另外建分支。图为协作示意。</p></section>
+<section id="clone"><h2>2．仓库地址是什么，如何拉取？</h2>
+<p><a href="http://yw-gitlab.miniworldplus.com/miniw/magnolia-product" target="_blank" rel="noopener">打开 GitLab 项目页面</a></p>
+<pre>http://yw-gitlab.miniworldplus.com/miniw/magnolia-product.git</pre>
+<h3>首次下载：每位成员各执行一次</h3><p>在想存放项目的位置打开 PowerShell：</p>
+<pre>git clone http://yw-gitlab.miniworldplus.com/miniw/magnolia-product.git
+cd magnolia-product</pre>
+<p class="muted">已有正确克隆的人不重复下载。登录按公司认证要求操作；HTTP 地址请在组织允许的可信网络中使用。</p>
+</section>
+<section id="branch"><h2>3．如何创建并加入统一版本分支？</h2>
+<h3>① 负责人创建：一个版本只创建一次</h3>
+<pre>git switch main
+git pull --ff-only origin main
+git switch -c version/v0.1.0-20261108
+git push -u origin version/v0.1.0-20261108</pre>
+<p>四行依次是：<strong>切到 main → 更新 main → 创建并切到版本分支 → 上传版本分支</strong>。</p>
+<h3>② 其他成员加入：不重复创建远端分支</h3>
+<pre>git fetch origin
+git switch --track origin/version/v0.1.0-20261108</pre>
+<p>如果本地已经有这个分支，改用：</p>
+<pre>git switch version/v0.1.0-20261108</pre>
+<p>确认当前分支后，再让 AI 修改：</p><pre>git branch --show-current</pre>
+</section>
+<section id="merge"><h2>4．多人如何提交？合并规则是什么？</h2>
+<h3>① 修改前：同步版本分支</h3>
+<p>在版本分支、且没有未提交改动时执行：</p>
+<pre>git pull --ff-only origin version/v0.1.0-20261108</pre>
+<p>然后让 AI 修改自己负责的范围，并实际体验。<strong>同一个文件或流程先协调，避免同时改。</strong></p>
+<h3>② 修改后：提交、同步，再推送</h3>
+<pre>git status
+git add -- "本次修改的文件路径"
+git diff --cached
+git commit -m "说明本次调整内容"
+git pull --no-rebase --no-edit origin version/v0.1.0-20261108
+git push origin version/v0.1.0-20261108</pre>
+<p>文件路径与提交说明请替换为实际内容。<code>git add</code> 后可列出多个文件；提交前检查不含密钥、运行数据和不相关改动。拉取可能合并别人的新提交，<strong>需检查受影响的体验再推送</strong>。</p>
+<div class="tip warn"><strong>发生冲突：</strong>停下，请 AI / 负责人说明并协调双方改动，解决后检查、提交，再推送。不要执行强制推送或破坏性回退。推送被拒绝可能是别人刚提交了新内容，先核对并重新同步，不直接覆盖。</div>
+<h3>③ 整版完成：只发起一次版本合并申请</h3>
+<ol><li>负责人通知大家暂停向本版推送，检查最新汇总版本并确认整体体验。</li><li>GitLab：<strong>Merge requests → New merge request</strong>。</li><li><strong>Source 来源：</strong><code>version/v0.1.0-20261108</code>。</li><li><strong>Target 目标：</strong><code>main</code>。</li><li>写清版本范围，指定产品 / 设计 / 交互确认人。</li><li>冲突解决、体验确认后，由合入负责人点击 <strong>Merge</strong>。若确认后又有改动，需重新确认。</li></ol>
+<div class="tip"><strong>规则：</strong>日常修改直接提交到统一版本分支，不逐项向 main 发 MR；main 由负责人通过版本 MR 合入，不由成员直接推送。合入后不再往旧版本塞新需求，下个版本从最新 main 创建新分支。</div>
+</section>
+<section id="handoff"><h2>5．最终统一到 main 吗？交给开发和测试哪个版本？</h2>
+<p><strong>是。整体体验确认后的版本分支，通过 MR 合入 main。</strong>不是把个人本地内容直接推送覆盖 main。</p>
+<p>合入完成后，成员更新本地主线：</p>
+<pre>git switch main
+git pull --ff-only origin main</pre>
+<table><thead><tr><th>用途</th><th>使用版本</th></tr></thead><tbody>
+<tr><td>日常 AI 修改与阶段体验</td><td>统一版本分支</td></tr>
+<tr><td>最终移交开发、测试</td><td>main 中本版已确认的固定提交</td></tr>
+<tr><td>生成最终 PRD / checklist</td><td>与移交项目完全相同的固定版本</td></tr>
+</tbody></table>
+<p><strong>建议由负责人给本次合入提交打标签：</strong><code>v0.1.0-20261108</code>。在 GitLab 的 Tags → New tag 中填写标签名，指向<strong>本次确认的合入提交</strong>；入口名称可能随版本变化。交付时附这个标签，不能只说“拿最新 main”。</p>
+<p>开发与测试接收的是 <strong>main 上的同一冻结版本</strong>，不是仍在变化的版本分支。最终 PRD 只包含用户场景与最终规则；checklist 包含前置条件、步骤、预期结果，不包含中途修正或当前验收结果。</p>
+<div class="tip"><strong>一句话：版本分支共同修改，整版确认后合入 main，固定版本交给开发和测试。</strong></div>
+<p class="muted">本次只更新教程，未创建实际版本分支、执行合并、打标签或推送。项目运行与共享体验环境按仓库真实说明准备；合入 main 不会自动更新运行中的网页。</p>
+</section></main></body></html>
