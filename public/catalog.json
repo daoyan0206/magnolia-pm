@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "version": "79ff029d9381092f6f2eff73c39fe02f1a276f7589fabefd4a217018ff164ff1",
+  "generatedAt": "2026-11-10T07:39:02.177Z",
+  "games": [
+    {
+      "id": "1",
+      "title": "雷霆战机：无限超载",
+      "pitch": "Game Studio · 原版规则",
+      "author": "Game Studio",
+      "orientation": "portrait",
+      "publicBuildId": "572b14e0811e7f5c2d8713d8cca1aadd88c316ae3283daa03f647c0ad57fbafb",
+      "nodeBuildId": "ec5e77fa8b0abfb1b2f177bd38ae065e5d4748cc474e65b2873e457ff5289dbc",
+      "entry": "public/games/1/572b14e0811e7f5c2d8713d8cca1aadd88c316ae3283daa03f647c0ad57fbafb/index.html",
+      "cover": {
+        "url": "public/games/1/572b14e0811e7f5c2d8713d8cca1aadd88c316ae3283daa03f647c0ad57fbafb/cover_ebe9597665629e60ddabfb7942ec1e7008b949c9ca7c849a47b0a26251f72b7b.jpg",
+        "type": "image"
+      },
+      "mode": "standalone",
+      "storage": "local-only"
+    }
+  ],
+  "featuredIds": [
+    "1"
+  ]
+}
