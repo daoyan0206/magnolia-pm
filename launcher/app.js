@@ -1,4 +1,4 @@
-import { CatalogClient, siteRootFor, publicAssetURL } from './catalog.js';
+import { CatalogClient, siteRootFor, publicAssetURL, sortPublicGames } from './catalog.js';
 
 const root = siteRootFor(import.meta.url), list = document.querySelector('#games'), status = document.querySelector('#catalogStatus');
 const search = document.querySelector('#search'), refresh = document.querySelector('#refresh'), empty = document.querySelector('#empty');
@@ -7,8 +7,7 @@ function text(tag, className, value) { const node = document.createElement(tag);
 function render() {
   list.replaceChildren(); const query = search.value.trim().toLocaleLowerCase();
   const featured = new Set(catalog?.featuredIds || []);
-  const games = [...(catalog?.games || [])].filter(game => [game.title, game.pitch, game.author].some(value => value.toLocaleLowerCase().includes(query)));
-  games.sort((a, b) => Number(featured.has(b.id)) - Number(featured.has(a.id)));
+  const games = sortPublicGames(catalog?.games || [], catalog?.featuredIds || []).filter(game => [game.title, game.pitch, game.author, game.genre].some(value => value.toLocaleLowerCase().includes(query)));
   empty.hidden = games.length !== 0;
   for (const game of games) {
     const card = document.createElement('article'); card.className = 'game-card';
@@ -21,6 +20,7 @@ function render() {
     } else card.append(text('div', 'cover cover-placeholder', 'H5 · 单机游戏'));
     const body = document.createElement('div'); body.className = 'card-body';
     if (featured.has(game.id)) body.append(text('p', 'card-badge', '精选'));
+    if (game.genre) body.append(text('p', 'card-note', '分类：' + game.genre));
     body.append(text('h2', '', game.title), text('p', 'card-pitch', game.pitch || '打开游戏，开始体验。'), text('p', 'card-author', '作者：' + (game.author || '未署名')),
       text('p', 'card-note', '单机 · 本机保存 · ' + ({ portrait: '竖屏', landscape: '横屏', auto: '自适应' }[game.orientation])));
     const link = text('a', 'button', '开始游戏'); link.setAttribute('aria-label', '开始游戏：' + game.title);

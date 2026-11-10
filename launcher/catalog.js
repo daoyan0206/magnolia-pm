@@ -14,9 +14,10 @@ export function publicAssetURL(relative, root, prefix) {
   return url;
 }
 export function validatePublicGame(raw, root) {
-  if (!ownFields(raw, ['id', 'title', 'pitch', 'author', 'orientation', 'publicBuildId', 'nodeBuildId', 'entry', 'cover', 'mode', 'storage'])) fail('公开游戏包含未知字段');
+  if (!ownFields(raw, ['id', 'title', 'pitch', 'author', 'genre', 'orientation', 'publicBuildId', 'nodeBuildId', 'entry', 'cover', 'mode', 'storage'])) fail('公开游戏包含未知字段');
   if (typeof raw.id !== 'string' || !GAME_ID.test(raw.id) || !SHA64.test(raw.publicBuildId || '') || !SHA64.test(raw.nodeBuildId || '')) fail('公开游戏编号或版本无效');
   for (const [key, min, max] of [['title', 1, 120], ['pitch', 0, 500], ['author', 0, 120]]) if (typeof raw[key] !== 'string' || raw[key].length < min || raw[key].length > max) fail('公开游戏文字字段无效');
+  if (raw.genre !== undefined && (typeof raw.genre !== 'string' || raw.genre.length > 80)) fail('公开游戏分类无效');
   if (!['portrait', 'landscape', 'auto'].includes(raw.orientation) || raw.mode !== 'standalone' || raw.storage !== 'local-only') fail('此公开客户端只支持本机保存单机版');
   const prefix = 'public/games/' + raw.id + '/' + raw.publicBuildId + '/';
   publicAssetURL(raw.entry, root, prefix);
@@ -29,8 +30,12 @@ export function validatePublicGame(raw, root) {
     if (!suffix.test(raw.cover.url)) fail('公开封面类型无效');
     cover = Object.freeze({ url: raw.cover.url, type: raw.cover.type });
   }
-  return Object.freeze({ id: raw.id, title: raw.title, pitch: raw.pitch, author: raw.author, orientation: raw.orientation,
+  return Object.freeze({ id: raw.id, title: raw.title, pitch: raw.pitch, author: raw.author, genre: raw.genre || '', orientation: raw.orientation,
     publicBuildId: raw.publicBuildId, nodeBuildId: raw.nodeBuildId, entry: raw.entry, cover, mode: 'standalone', storage: 'local-only' });
+}
+export function sortPublicGames(games, featuredIds) {
+  const rank = new Map(featuredIds.map((id, index) => [id, index]));
+  return [...games].sort((a, b) => (rank.get(a.id) ?? games.length) - (rank.get(b.id) ?? games.length));
 }
 export function validateCatalog(raw, root) {
   if (!ownFields(raw, ['schema', 'version', 'generatedAt', 'games', 'featuredIds']) || raw.schema !== 1 || !SHA64.test(raw.version || '')) fail('公开目录格式或版本无效');
