@@ -1,4 +1,4 @@
-import { CatalogClient, siteRootFor, publicAssetURL, sortPublicGames } from './catalog.js';
+import { CatalogClient, siteRootFor, publicAssetURL, sortPublicGames } from './catalog.js?v=b9cbc5b9d6f2df491abd1ad3b25f771046acd37aba2cd78900e93997c2de24d0';
 
 const root = siteRootFor(import.meta.url), list = document.querySelector('#games'), status = document.querySelector('#catalogStatus');
 const search = document.querySelector('#search'), refresh = document.querySelector('#refresh'), empty = document.querySelector('#empty');

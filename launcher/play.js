@@ -1,5 +1,5 @@
-import { siteRootFor, validateCatalog, publicAssetURL, fetchPublicText } from './catalog.js';
-import { createStorageBridge, buildIsolatedHtml } from './storage-bridge.js';
+import { siteRootFor, validateCatalog, publicAssetURL, fetchPublicText } from './catalog.js?v=b9cbc5b9d6f2df491abd1ad3b25f771046acd37aba2cd78900e93997c2de24d0';
+import { createStorageBridge, buildIsolatedHtml } from './storage-bridge.js?v=b9cbc5b9d6f2df491abd1ad3b25f771046acd37aba2cd78900e93997c2de24d0';
 
 export async function loadSelectedGame({ root, search, fetchImpl = globalThis.fetch, now = Date.now }) {
   const params = new URLSearchParams(search), id = params.get('id'), build = params.get('build');
